@@ -1,0 +1,18 @@
+<%-include("partials/header")-%>
+
+<form class="" action="/" method="post">
+  <h1 name="Greeting">Hello</h1>
+  <p> <%=info%> </p>
+
+  <% users.forEach(function(user){ %>
+    <%user.posts.forEach(function(post){ %>
+      <h2><%=post.postTitle %></h2>
+      <p><%=post.postText.substring(0,100)+" ... "%>
+        <a href="/post/<%=post._id%>">Read More </a>
+      </p>
+    <% }) %>
+  <% }) %>
+  <a class="btn btn-light btn-lg logoutButton" href="/logout" role="button">Log Out</a>
+  <a class="btn btn-dark btn-lg composeButton" href="/compose" role="button">Compose a post</a>
+</form>
+<%-include("partials/footer")-%>
