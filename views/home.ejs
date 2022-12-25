@@ -6,6 +6,7 @@
 
   <% users.forEach(function(user){ %>
     <%user.posts.forEach(function(post){ %>
+      <p><%=user.username%></p>
       <h2><%=post.postTitle %></h2>
       <p><%=post.postText.substring(0,100)+" ... "%>
         <a href="/post/<%=post._id%>">Read More </a>
