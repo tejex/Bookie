@@ -27,7 +27,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 //******************************************************************************************************************//
-const password = encodeURIComponent("Gtalebron@23")
+const password = encodeURIComponent("****************")
 const uri = `mongodb+srv://bamMongo23:${password}@cluster0.wvbvubq.mongodb.net/blogWebsiteDB`;
 mongoose.connect(uri, { useNewUrlParser: true})
 //******************************************************************************************************************//
