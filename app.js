@@ -27,10 +27,15 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 //******************************************************************************************************************//
-const password = encodeURIComponent("****************")
+const password = encodeURIComponent("Gtalebron@23")
 const uri = `mongodb+srv://bamMongo23:${password}@cluster0.wvbvubq.mongodb.net/blogWebsiteDB`;
 mongoose.connect(uri, { useNewUrlParser: true})
 //******************************************************************************************************************//
+const postSchema = new mongoose.Schema({
+  postTitle: String,
+  postText: String
+});
+
 const userSchema = new mongoose.Schema({
   username:{
     type:String
@@ -41,13 +46,9 @@ const userSchema = new mongoose.Schema({
   googleId:{
     type:String
   },
-  posts:[
-    {
-    postTitle: String,
-    postText: String
-    }
-  ]
+  posts:[postSchema]
 })
+
 userSchema.plugin(passportLocalMongoose);
 userSchema.plugin(findOrCreate);
 //******************************************************************************************************************//
@@ -160,9 +161,6 @@ app.post("/register",function(req,res){
 });
 //******************************************************************************************************************//
 app.post("/login",function(req,res){
-  const userName = req.body.userName;
-  const passWord = req.body.password;
-
   const user = new User({
     username: req.body.username,
     password: req.body.password
@@ -188,7 +186,6 @@ app.post("/compose",function(req,res){
 
   User.findById(req.user.id,function(err,foundUser){
     if(!err){
-      console.log(foundUser);
       foundUser.posts.push({
         postTitle:postHeader,
         postText:postContent
@@ -196,6 +193,7 @@ app.post("/compose",function(req,res){
       foundUser.save(function(){
         User.find({"post":{$ne:null}},function(err,foundUsers){
           if(!err){
+        
               res.render("home",{info:homeStartingContent,users:foundUsers});
           }
           else{
@@ -208,6 +206,24 @@ app.post("/compose",function(req,res){
       console.log(err);
     }
   })
+})
+//******************************************************************************************************************//
+app.get("/delete",function(req,res){
+  res.render("currentUser",{user:req.user})
+})
+//******************************************************************************************************************//
+app.post("/removePost/:userId/:postId",function(req,res){
+User.updateOne(
+    { '_id': req.params.userId }, 
+    { $pull: { posts: { _id: req.params.postId } } },function(err,results){
+      if (err){
+        console.log(err)
+    }else{
+        console.log("Result :", results) 
+    }
+    }
+);
+res.redirect("/home")
 })
 //******************************************************************************************************************//
 app.get("/post/:postId",function(req,res){
