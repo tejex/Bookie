@@ -1,0 +1,15 @@
+<%-include("partials/header")-%>
+
+
+<h4>Current User: <%= user.username %></h4>
+<% user.posts.forEach(function(post,index){ %>
+<form class="" action="/removePost/<%=user._id%>/<%=post._id%>" method="post">
+        <h2><%=post.postTitle%></h2>
+        <p><%= post.postText %></p>
+        <button class="btn btn-primary" type="submit" name="publishButton" >Delete</button>
+        <hr>
+      <% }) %>
+</form>
+
+
+<%-include("partials/footer")-%>
